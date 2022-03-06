@@ -22,6 +22,7 @@ function QuestionList() {
         const updatedQuestions = questions.filter(q => q.id !== id);
         setQuestions(updatedQuestions)
       });
+    }
 
     function handleAnswerChange(id, correctIndex) {
       fetch(`http://localhost:4000/questions/${id}`, {
@@ -32,18 +33,20 @@ function QuestionList() {
         body: JSON.stringify({ correctIndex }),
       })
         .then(r => r.json())
-        .thn(updatedQuestions => {
+        .then(updatedQuestion => {
           const updatedQuestions = questions.map(question => {
-            if (question.id === updatedQuestions.id) return updatedQuestions;
+            if (question.id === updatedQuestion.id) return updatedQuestion;
             return question;
           });
-          setQuestions(updateQuestions);
+          setQuestions(updatedQuestions);
         });
     }
 
     const questionItems = questions.map(question => {
-      <QuestionItem key={question.id} question={question}
-        onDeleteClick={handleDeleteClick} onAnswerChange={handleAnswerChange} />
+      return (
+        <QuestionItem key={question.id} question={question}
+          onDeleteClick={handleDeleteClick} onAnswerChange={handleAnswerChange} />
+      )
     });
 
     return (
@@ -53,6 +56,5 @@ function QuestionList() {
       </section>
     );
   }
-}
 
 export default QuestionList;
